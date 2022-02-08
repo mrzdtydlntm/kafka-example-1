@@ -4,9 +4,11 @@ go 1.12
 
 require (
 	github.com/DataDog/zstd v1.4.1 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/frankban/quicktest v1.4.1 // indirect
-	github.com/gin-gonic/gin v1.4.0
 	github.com/joho/godotenv v1.3.0
+	github.com/labstack/echo v3.3.10+incompatible
+	github.com/labstack/gommon v0.3.1 // indirect
 	github.com/oklog/ulid/v2 v2.0.2
 	github.com/pierrec/lz4 v2.2.6+incompatible // indirect
 	github.com/segmentio/kafka-go v0.3.2

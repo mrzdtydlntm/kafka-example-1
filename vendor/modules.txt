@@ -1,0 +1,42 @@
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+github.com/dgrijalva/jwt-go
+# github.com/golang/snappy v0.0.1
+github.com/golang/snappy
+# github.com/joho/godotenv v1.3.0
+github.com/joho/godotenv
+github.com/joho/godotenv/autoload
+# github.com/labstack/echo v3.3.10+incompatible
+github.com/labstack/echo
+github.com/labstack/echo/middleware
+# github.com/labstack/gommon v0.3.1
+github.com/labstack/gommon/bytes
+github.com/labstack/gommon/color
+github.com/labstack/gommon/log
+github.com/labstack/gommon/random
+# github.com/mattn/go-colorable v0.1.11
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.14
+github.com/mattn/go-isatty
+# github.com/oklog/ulid/v2 v2.0.2
+github.com/oklog/ulid/v2
+# github.com/segmentio/kafka-go v0.3.2
+github.com/segmentio/kafka-go
+github.com/segmentio/kafka-go/sasl
+github.com/segmentio/kafka-go/snappy
+# github.com/valyala/bytebufferpool v1.0.0
+github.com/valyala/bytebufferpool
+# github.com/valyala/fasttemplate v1.2.1
+github.com/valyala/fasttemplate
+# golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
+golang.org/x/crypto/acme
+golang.org/x/crypto/acme/autocert
+# golang.org/x/net v0.0.0-20190813141303-74dc4d7220e7
+golang.org/x/net/idna
+# golang.org/x/sys v0.0.0-20211103235746-7861aae1554b
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+# golang.org/x/text v0.3.2
+golang.org/x/text/secure/bidirule
+golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm

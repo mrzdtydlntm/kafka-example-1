@@ -8,8 +8,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 
 	kafkaexample "github.com/friendsofgo/kafka-example/pkg"
 	"github.com/friendsofgo/kafka-example/pkg/kafka"
@@ -21,53 +22,52 @@ type Request struct {
 }
 
 func main() {
+	e := echo.New()
+	e.POST("/join", joinHandler)
+	e.POST("/publish", publishHandler)
+	middleware.Logger()
+	e.Start(":8000")
+}
 
+func joinHandler(c echo.Context) error {
 	var (
 		brokers = os.Getenv("KAFKA_BROKERS")
 		topic   = os.Getenv("KAFKA_TOPIC")
 	)
-
 	publisher := kafka.NewPublisher(strings.Split(brokers, ","), topic)
+	var req Request
+	err := json.NewDecoder(c.Request().Body).Decode(&req)
+	defer c.Request().Body.Close()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "hehe")
+	}
 
-	r := gin.Default()
-	r.POST("/join", joinHandler(publisher))
-	r.POST("/publish", publishHandler(publisher))
+	message := kafkaexample.NewSystemMessage(fmt.Sprintf("%s has joined the room!", req.Username))
 
-	_ = r.Run()
+	if err := publisher.Publish(context.Background(), message); err != nil {
+		c.JSON(http.StatusInternalServerError, "hehe")
+	}
+	return c.JSON(http.StatusAccepted, "message published")
 }
 
-func joinHandler(publisher kafkaexample.Publisher) func(*gin.Context) {
-	return func(c *gin.Context) {
-		var req Request
-		err := json.NewDecoder(c.Request.Body).Decode(&req)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
-		}
-
-		message := kafkaexample.NewSystemMessage(fmt.Sprintf("%s has joined the room!", req.Username))
-
-		if err := publisher.Publish(context.Background(), message); err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
-		}
-
-		c.JSON(http.StatusAccepted, gin.H{"message": "message published"})
+func publishHandler(c echo.Context) error {
+	var (
+		brokers = os.Getenv("KAFKA_BROKERS")
+		topic   = os.Getenv("KAFKA_TOPIC")
+	)
+	publisher := kafka.NewPublisher(strings.Split(brokers, ","), topic)
+	var req Request
+	err := json.NewDecoder(c.Request().Body).Decode(&req)
+	defer c.Request().Body.Close()
+	fmt.Println(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "hehe")
 	}
-}
 
-func publishHandler(publisher kafkaexample.Publisher) func(*gin.Context) {
-	return func(c *gin.Context) {
-		var req Request
-		err := json.NewDecoder(c.Request.Body).Decode(&req)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
-		}
+	message := kafkaexample.NewMessage(req.Username, req.Message)
 
-		message := kafkaexample.NewMessage(req.Username, req.Message)
-
-		if err := publisher.Publish(context.Background(), message); err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
-		}
-
-		c.JSON(http.StatusAccepted, gin.H{"message": "message published"})
+	if err := publisher.Publish(context.Background(), message); err != nil {
+		c.JSON(http.StatusInternalServerError, "hehe")
 	}
+	return c.JSON(http.StatusAccepted, "Message Published")
 }
